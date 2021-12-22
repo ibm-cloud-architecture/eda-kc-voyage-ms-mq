@@ -51,7 +51,7 @@ public class VoyageRequestListener implements Runnable {
     @Override
     public void run() {
         log.info("Connecting to message queue " + System.getenv("VOYAGE_REQUEST_QUEUE"));
-        try (JMSContext context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)) {
+        try (JMSContext context = connectionFactory.createContext(Session.CLIENT_ACKNOWLEDGE)) {
             javax.jms.JMSConsumer consumer = context.createConsumer(
                     context.createQueue(System.getenv("VOYAGE_REQUEST_QUEUE")));
             while (true) {
