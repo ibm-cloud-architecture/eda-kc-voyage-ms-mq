@@ -60,14 +60,22 @@ public class VoyageRequestListener implements Runnable {
                     return;
                 }
                 log.info("received message from queue... " + message.getBody(String.class));
-                processMessage(message.getBody(String.class));
+                EventBase responseEvent = processMessage(message.getBody(String.class));
+
+                try {
+                    jmsQueueWriter.sendMessage(responseEvent, System.getenv("VOYAGE_RESPONSE_QUEUE"));
+                } catch (Exception e) {
+                    log.error("Could not send response message, rolling back...", e);
+                    //TODO: ROLLBACK LOGIC TO BE IMPLEMENTED
+                }
+                message.acknowledge();
             }
-        } catch (JMSException e) {
+        } catch (Exception e) {
             log.error("error parsing message..", e);
         }
     }
 
-    public void processMessage(String rawMessageBody) {
+    public EventBase processMessage(String rawMessageBody) throws InterruptedException {
 
         try {
 
@@ -104,10 +112,11 @@ public class VoyageRequestListener implements Runnable {
                         voyageCanceledPayload);
             }
 
-            jmsQueueWriter.sendMessage(responseEvent, System.getenv("VOYAGE_RESPONSE_QUEUE"));
+            return responseEvent;
 
         } catch (Exception e) {
             log.error("error processing message...", e);
+            throw e;
         }
     }
 }
