@@ -1,3 +1,4 @@
+:set fileformat=unix
 #!/bin/sh
 # ----------------------------------------------------------------------------
 # Licensed to the Apache Software Foundation (ASF) under one
