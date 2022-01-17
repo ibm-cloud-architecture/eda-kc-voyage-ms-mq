@@ -1,5 +1,8 @@
 package ibm.gse.voyagems.domain.model.voyage;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class VoyageNotFoundPayload {
 
     private String orderID;

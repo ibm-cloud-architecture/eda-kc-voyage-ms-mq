@@ -1,7 +1,9 @@
 package ibm.gse.voyagems.domain.model.voyage;
 
 import ibm.gse.voyagems.domain.model.EventBase;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
+@RegisterForReflection
 public class VoyageCanceledEvent extends EventBase {
 
 
