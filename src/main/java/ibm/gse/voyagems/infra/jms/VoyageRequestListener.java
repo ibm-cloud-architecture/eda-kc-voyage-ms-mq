@@ -1,4 +1,4 @@
-package ibm.gse.voyagems.jms;
+package ibm.gse.voyagems.infra.jms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ibm.gse.voyagems.domain.model.EventBase;
