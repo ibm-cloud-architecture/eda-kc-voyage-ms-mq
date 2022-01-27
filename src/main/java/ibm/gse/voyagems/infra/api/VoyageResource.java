@@ -1,6 +1,8 @@
 package ibm.gse.voyagems.infra.api;
 
-import java.util.List;
+import ibm.gse.voyagems.domain.VoyageService;
+import ibm.gse.voyagems.domain.model.Voyage;
+import io.smallrye.mutiny.Multi;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -9,10 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
-import ibm.gse.voyagems.domain.VoyageService;
-import ibm.gse.voyagems.domain.model.Voyage;
-import io.smallrye.mutiny.Multi;
+import java.util.List;
 
 @Path("/api/v1/voyages")
 @Produces(MediaType.APPLICATION_JSON)

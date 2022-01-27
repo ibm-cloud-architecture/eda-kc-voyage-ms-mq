@@ -1,12 +1,11 @@
 package ibm.gse.voyagems.domain;
 
-import java.util.List;
+import ibm.gse.voyagems.domain.model.Voyage;
+import ibm.gse.voyagems.infra.repo.VoyageRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-
-import ibm.gse.voyagems.domain.model.Voyage;
-import ibm.gse.voyagems.infra.repo.VoyageRepository;
+import java.util.List;
 
 
 @ApplicationScoped

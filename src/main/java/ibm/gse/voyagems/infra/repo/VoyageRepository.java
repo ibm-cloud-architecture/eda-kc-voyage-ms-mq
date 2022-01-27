@@ -1,8 +1,8 @@
 package ibm.gse.voyagems.infra.repo;
 
-import java.util.List;
-
 import ibm.gse.voyagems.domain.model.Voyage;
+
+import java.util.List;
 
 public interface VoyageRepository {
 

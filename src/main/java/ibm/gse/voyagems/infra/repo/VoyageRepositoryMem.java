@@ -1,16 +1,14 @@
 package ibm.gse.voyagems.infra.repo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ibm.gse.voyagems.domain.model.Voyage;
+
+import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.inject.Singleton;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import ibm.gse.voyagems.domain.model.Voyage;
 
 @Singleton
 public class VoyageRepositoryMem implements VoyageRepository {
