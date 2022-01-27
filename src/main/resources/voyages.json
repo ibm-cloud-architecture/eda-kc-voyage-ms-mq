@@ -1,0 +1,13 @@
+[
+    {
+        "voyageID" : "V01",
+        "origin": "SF",
+        "destination": "Shanghai",
+        "departureDate": "01312022",
+        "expectedArrivalDate": "02202022",
+        "status": "VOYAGE_PENDING",
+        "orderIDs" : [ "Or01" , "Order01"]
+
+    }
+
+]
