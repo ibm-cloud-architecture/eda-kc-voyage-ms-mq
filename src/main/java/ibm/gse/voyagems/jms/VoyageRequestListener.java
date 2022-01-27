@@ -61,14 +61,16 @@ public class VoyageRequestListener implements Runnable {
                 }
                 log.info("received message from queue... " + message.getBody(String.class));
                 EventBase responseEvent = processMessage(message.getBody(String.class));
-
+                boolean messageSent = false;
                 try {
-                    jmsQueueWriter.sendMessage(responseEvent, System.getenv("VOYAGE_RESPONSE_QUEUE"));
+                    messageSent = jmsQueueWriter.sendMessage(responseEvent, System.getenv("VOYAGE_RESPONSE_QUEUE"));
                 } catch (Exception e) {
                     log.error("Could not send response message, rolling back...", e);
-                    //TODO: ROLLBACK LOGIC TO BE IMPLEMENTED
+                    throw e;
                 }
-                message.acknowledge();
+                if(messageSent) {
+                    message.acknowledge();
+                }
             }
         } catch (Exception e) {
             log.error("error parsing message..", e);
@@ -83,7 +85,17 @@ public class VoyageRequestListener implements Runnable {
             log.debug("received message from queue... " + rawMessageBody);
             JsonObject rawEvent = new JsonObject(rawMessageBody);
             EventBase responseEvent = null;
+            String productId = null;
+
+            if((productId= rawEvent.getJsonObject("payload").getString("productID")) != null) {
+                if (productId.equals("VOYAGE_FAILS")) {
+                    rawEvent.put("type", EventBase.TYPE_CONTAINER_CANCELED);
+                }
+            }
+
             if(rawEvent.getString("type").equals(EventBase.ORDER_CREATED_TYPE)) {
+
+                Thread.sleep(3000);
 
                 UUID voyageId = UUID.randomUUID();
                 log.debug("Generated new voyage ID: " + voyageId);
@@ -94,13 +106,11 @@ public class VoyageRequestListener implements Runnable {
                         new VoyageAssignmentPayload(orederId, voyageId.toString());
                 responseEvent = new VoyageAssignedEvent(System.currentTimeMillis(), "1.0", voyageAssignmentPayload);
 
-            } else if(rawEvent.getString("type").equals(EventBase.ORDER_CANCELLED_TYPE) ||
+            } else if(rawEvent.getString("type").equals(EventBase.TYPE_CONTAINER_CANCELED) ||
                     rawEvent.getString("type").equals(EventBase.TYPE_CONTAINER_NOT_FOUND)) {
 
                 log.info("Canceling voyage schedule..");
-                /*
-                SIMULATE ROLLBACK VOYAGE SCHEDULE TRANSACTION
-                 */
+
                 Thread.sleep(3000);
 
                 log.info("Canceled voyage schedule..");

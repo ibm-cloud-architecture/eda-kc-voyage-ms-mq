@@ -18,6 +18,8 @@ public class EventBase {
     public static final String TYPE_ORDER_SPOILT = "OrderSpoilt"; // from containers ms
     public static final String TYPE_CONTAINER_ALLOCATED = "ContainerAllocated";
     public static final String TYPE_CONTAINER_NOT_FOUND = "ContainerNotFound";
+    public static final String TYPE_CONTAINER_CANCELED = "ContainerCanceled";
+
 
 
     public static final String TYPE_VOYAGE_ASSIGNED = "VoyageAssigned"; // from voyage ms
