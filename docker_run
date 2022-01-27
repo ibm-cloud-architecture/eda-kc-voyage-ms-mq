@@ -1,0 +1,1 @@
+docker run -i --rm -p 8080:8080 -e MQ_URL="failover:(amqp://host.docker.internal:5672?jms.prefetchPolicy.queuePrefetch=1)" -e VOYAGE_RESPONSE_QUEUE=VOYAGE_RESPONSE -e VOYAGE_REQUEST_QUEUE=VOYAGE_REQUEST -e FREEZER_REQUEST_QUEUE=FREEZER_REQUESTS quay.io/ibmcase/eda-kc-voyage-ms-mq:1.1
