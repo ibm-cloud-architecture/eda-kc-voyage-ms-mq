@@ -25,6 +25,12 @@ public class Voyage {
         this.orderIDs.add(oid);
     }
 
+    public Voyage (Voyage voyage) {
+        this.voyageID = voyage.voyageID;
+        this.orderIDs = new ArrayList<>();
+        orderIDs.addAll(voyage.orderIDs);
+    }
+
     public void addOrder(String oid) {
         this.orderIDs.add(oid);
     }
