@@ -40,7 +40,7 @@ public class VoyageRepositoryMem implements VoyageRepository {
 
     @Override
     public Voyage add(Voyage voyage) {
-        if (repo.putIfAbsent(voyage.voyageID, voyage) != null)
+        if (repo.putIfAbsent(voyage.voyageID, voyage) == null)
             return voyage;
         return null;
 
