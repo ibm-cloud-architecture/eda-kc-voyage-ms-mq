@@ -15,7 +15,7 @@ public class VoyageRepositoryMem implements VoyageRepository {
     private static ConcurrentHashMap<String,Voyage> repo = new ConcurrentHashMap<String,Voyage>();
     private static ObjectMapper mapper = new ObjectMapper();
 
-    public VoyageRepositoryMem(){
+    public VoyageRepositoryMem() {
         InputStream is = getClass().getClassLoader().getResourceAsStream("voyages.json");
         if (is == null) 
             throw new IllegalAccessError("file not found for voyages json");
@@ -56,7 +56,7 @@ public class VoyageRepositoryMem implements VoyageRepository {
     }
 
     @Override
-    public void removeOrderId(String orderId) {
+    public Voyage removeOrderId(String orderId) {
         Voyage toRemoveOrderId = repo.values()
                 .stream()
                 .filter(voyage -> voyage.orderIDs.contains(orderId))
@@ -64,6 +64,6 @@ public class VoyageRepositoryMem implements VoyageRepository {
                 .orElseThrow();
         toRemoveOrderId.removeOrder(orderId);
         toRemoveOrderId.status = Voyage.VOYAGE_CANCELLED;
-        update(toRemoveOrderId);
+        return update(toRemoveOrderId);
     }
 }

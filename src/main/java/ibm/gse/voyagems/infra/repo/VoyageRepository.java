@@ -10,5 +10,5 @@ public interface VoyageRepository {
     Voyage findById(String key);
     Voyage add(Voyage voyage);
     Voyage update(Voyage voyage);
-    void removeOrderId(String orderId);
+    Voyage removeOrderId(String orderId);
 }
