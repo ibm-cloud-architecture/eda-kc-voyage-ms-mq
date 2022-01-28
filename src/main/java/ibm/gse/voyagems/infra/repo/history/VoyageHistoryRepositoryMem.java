@@ -6,7 +6,7 @@ import ibm.gse.voyagems.domain.model.Voyage;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,7 +22,7 @@ public class VoyageHistoryRepositoryMem implements VoyageHistoryRepository{
             throw new IllegalAccessError("file not found for voyages json");
         try {
             List<Voyage> currentDefinitions = mapper.readValue(is, mapper.getTypeFactory().constructCollectionType(List.class, Voyage.class));
-            currentDefinitions.stream().forEach( (t) -> repo.put(t.voyageID, Collections.singletonList(t)));
+            currentDefinitions.stream().forEach( (t) -> repo.put(t.voyageID, new ArrayList<>(List.of(t))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -37,7 +37,7 @@ public class VoyageHistoryRepositoryMem implements VoyageHistoryRepository{
     @Override
     public void add(Voyage voyage) {
         String key = voyage.voyageID;
-        List<Voyage> firstHistoryElem = Collections.singletonList(voyage);
+        List<Voyage> firstHistoryElem = new ArrayList<>(List.of(voyage));
         repo.put(key, firstHistoryElem);
 
     }
