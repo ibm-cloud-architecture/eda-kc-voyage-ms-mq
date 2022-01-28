@@ -7,7 +7,7 @@ import ibm.gse.voyagems.domain.model.voyage.VoyageAssignedEvent;
 import ibm.gse.voyagems.domain.model.voyage.VoyageAssignmentPayload;
 import ibm.gse.voyagems.domain.model.voyage.VoyageCanceledEvent;
 import ibm.gse.voyagems.domain.model.voyage.VoyageCanceledPayload;
-import ibm.gse.voyagems.infra.repo.VoyageRepositoryMem;
+import ibm.gse.voyagems.domain.VoyageServiceProxy;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import io.vertx.core.json.JsonObject;
@@ -37,7 +37,7 @@ public class VoyageRequestListener implements Runnable {
     JMSQueueWriter<EventBase> jmsQueueWriter;
 
     @Inject
-    VoyageRepositoryMem voyageRepository;
+    VoyageServiceProxy voyageServiceProxy;
 
     private final ExecutorService scheduler = Executors.newSingleThreadExecutor();
 
@@ -110,7 +110,7 @@ public class VoyageRequestListener implements Runnable {
                 responseEvent = new VoyageAssignedEvent(System.currentTimeMillis(), "1.0", voyageAssignmentPayload);
 
                 Voyage newVoyage = new Voyage(voyageId.toString(), orederId);
-                voyageRepository.add(newVoyage);
+                voyageServiceProxy.add(newVoyage);
 
             } else if(rawEvent.getString("type").equals(EventBase.TYPE_CONTAINER_CANCELED) ||
                     rawEvent.getString("type").equals(EventBase.TYPE_CONTAINER_NOT_FOUND)) {
@@ -120,7 +120,7 @@ public class VoyageRequestListener implements Runnable {
                 log.info("Canceling voyage schedule..");
 
                 Thread.sleep(3000);
-                voyageRepository.removeOrderId(orederId);
+                voyageServiceProxy.removeOrderId(orederId);
 
                 log.info("Canceled voyage schedule..");
                 String reason = rawEvent.getJsonObject("payload").getString("reason");

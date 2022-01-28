@@ -1,6 +1,6 @@
 package ibm.gse.voyagems.infra.api;
 
-import ibm.gse.voyagems.domain.VoyageService;
+import ibm.gse.voyagems.domain.VoyageServiceProxy;
 import ibm.gse.voyagems.domain.model.Voyage;
 import io.smallrye.mutiny.Multi;
 
@@ -20,11 +20,11 @@ import java.util.List;
 public class VoyageResource {
     
     @Inject
-    public VoyageService service;
+    public VoyageServiceProxy service;
 
     @GET
     public Multi<Voyage> getAllActiveVoyages() {
-        List<Voyage> l = service.getAllVoyages();
+        List<Voyage> l = service.getAll();
         return Multi.createFrom().items(l.stream());
     }
 }

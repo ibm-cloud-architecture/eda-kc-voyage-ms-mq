@@ -1,7 +1,6 @@
-package ibm.gse.voyagems.infra.repo.proxy;
+package ibm.gse.voyagems.domain;
 
 import ibm.gse.voyagems.domain.model.Voyage;
-import ibm.gse.voyagems.infra.repo.VoyageRepository;
 import ibm.gse.voyagems.infra.repo.VoyageRepositoryMem;
 import ibm.gse.voyagems.infra.repo.history.VoyageHistoryRepositoryMem;
 
@@ -10,7 +9,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @ApplicationScoped
-public class VoyageRepositoryProxy {
+public class VoyageServiceProxy {
 
     @Inject
     VoyageHistoryRepositoryMem voyageHistoryRepositoryMem;
@@ -28,7 +27,8 @@ public class VoyageRepositoryProxy {
     }
 
     public Voyage add(Voyage voyage) {
-        Voyage newVoyage = voyageRepositoryMem.add(voyage);
+        Voyage createdVyage = voyageRepositoryMem.add(voyage);
+        Voyage newVoyage = new Voyage(createdVyage);
         voyageHistoryRepositoryMem.add(newVoyage);
         return newVoyage;
     }
@@ -45,5 +45,9 @@ public class VoyageRepositoryProxy {
         Voyage updatedVoyage = voyageRepositoryMem.removeOrderId(orderId);
         voyageHistoryRepositoryMem.update(updatedVoyage);
         return updatedVoyage;
+    }
+
+    public List<Voyage> getVoyageHistory(String voyageId) {
+        return voyageHistoryRepositoryMem.getHistory(voyageId);
     }
 }
