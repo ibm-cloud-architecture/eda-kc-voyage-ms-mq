@@ -37,4 +37,33 @@ public class VoyageRepositoryMem implements VoyageRepository {
     public Voyage findById(String key) {
         return repo.get(key);
     }
+
+    @Override
+    public Voyage add(Voyage voyage) {
+        if (repo.putIfAbsent(voyage.voyageID, voyage) != null)
+            return voyage;
+        return null;
+
+    }
+
+    @Override
+    public Voyage update(Voyage voyage) {
+        if(repo.remove(voyage.voyageID) != null) {
+            repo.put(voyage.voyageID, voyage);
+            return voyage;
+        }
+        return null;
+    }
+
+    @Override
+    public void removeOrderId(String orderId) {
+        Voyage toRemoveOrderId = repo.values()
+                .stream()
+                .filter(voyage -> voyage.orderIDs.contains(orderId))
+                .findFirst()
+                .orElseThrow();
+        toRemoveOrderId.removeOrder(orderId);
+        toRemoveOrderId.status = Voyage.VOYAGE_CANCELLED;
+        update(toRemoveOrderId);
+    }
 }

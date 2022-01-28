@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface VoyageRepository {
 
-    public List<Voyage> getAll();
-    public Voyage findById(String key);
+    List<Voyage> getAll();
+    Voyage findById(String key);
+    Voyage add(Voyage voyage);
+    Voyage update(Voyage voyage);
+    void removeOrderId(String orderId);
 }

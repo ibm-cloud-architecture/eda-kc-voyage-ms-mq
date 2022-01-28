@@ -2,10 +2,12 @@ package ibm.gse.voyagems.infra.jms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ibm.gse.voyagems.domain.model.EventBase;
+import ibm.gse.voyagems.domain.model.Voyage;
 import ibm.gse.voyagems.domain.model.voyage.VoyageAssignedEvent;
 import ibm.gse.voyagems.domain.model.voyage.VoyageAssignmentPayload;
 import ibm.gse.voyagems.domain.model.voyage.VoyageCanceledEvent;
 import ibm.gse.voyagems.domain.model.voyage.VoyageCanceledPayload;
+import ibm.gse.voyagems.infra.repo.VoyageRepositoryMem;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import io.vertx.core.json.JsonObject;
@@ -34,6 +36,8 @@ public class VoyageRequestListener implements Runnable {
     @Inject
     JMSQueueWriter<EventBase> jmsQueueWriter;
 
+    @Inject
+    VoyageRepositoryMem voyageRepository;
 
     private final ExecutorService scheduler = Executors.newSingleThreadExecutor();
 
@@ -105,20 +109,26 @@ public class VoyageRequestListener implements Runnable {
                         new VoyageAssignmentPayload(orederId, voyageId.toString());
                 responseEvent = new VoyageAssignedEvent(System.currentTimeMillis(), "1.0", voyageAssignmentPayload);
 
+                Voyage newVoyage = new Voyage(voyageId.toString(), orederId);
+                voyageRepository.add(newVoyage);
+
             } else if(rawEvent.getString("type").equals(EventBase.TYPE_CONTAINER_CANCELED) ||
                     rawEvent.getString("type").equals(EventBase.TYPE_CONTAINER_NOT_FOUND)) {
+
+                String orederId = rawEvent.getJsonObject("payload").getString("orderID");
 
                 log.info("Canceling voyage schedule..");
 
                 Thread.sleep(3000);
+                voyageRepository.removeOrderId(orederId);
 
                 log.info("Canceled voyage schedule..");
-                String orederId = rawEvent.getJsonObject("payload").getString("orderID");
                 String reason = rawEvent.getJsonObject("payload").getString("reason");
 
                 VoyageCanceledPayload voyageCanceledPayload = new VoyageCanceledPayload(orederId, reason);
                 responseEvent = new VoyageCanceledEvent(System.currentTimeMillis(), "1.0",
                         voyageCanceledPayload);
+
             }
 
             return responseEvent;
