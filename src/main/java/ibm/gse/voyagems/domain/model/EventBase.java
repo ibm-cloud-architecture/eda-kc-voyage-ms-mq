@@ -1,11 +1,14 @@
 package ibm.gse.voyagems.domain.model;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 /**
  * This is the common part of the order events. 
  * Events are data element, so limit inheritance and polymorphism.
  * @author jerome boyer
  *
  */
+@RegisterForReflection
 public class EventBase {
 
 	public static final String ORDER_CREATED_TYPE = "OrderCreated";
@@ -15,6 +18,8 @@ public class EventBase {
     public static final String TYPE_ORDER_SPOILT = "OrderSpoilt"; // from containers ms
     public static final String TYPE_CONTAINER_ALLOCATED = "ContainerAllocated";
     public static final String TYPE_CONTAINER_NOT_FOUND = "ContainerNotFound";
+    public static final String TYPE_CONTAINER_CANCELED = "ContainerCanceled";
+
 
 
     public static final String TYPE_VOYAGE_ASSIGNED = "VoyageAssigned"; // from voyage ms
