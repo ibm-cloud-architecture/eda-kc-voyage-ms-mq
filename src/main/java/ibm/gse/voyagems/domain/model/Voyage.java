@@ -29,6 +29,10 @@ public class Voyage {
         this.voyageID = voyage.voyageID;
         this.orderIDs = new ArrayList<>();
         orderIDs.addAll(voyage.orderIDs);
+        this.origin = voyage.origin;
+        this.departureDate = voyage.departureDate;
+        this.expectedArrivalDate = voyage.expectedArrivalDate;
+        this.destination = voyage.destination;
     }
 
     public void addOrder(String oid) {

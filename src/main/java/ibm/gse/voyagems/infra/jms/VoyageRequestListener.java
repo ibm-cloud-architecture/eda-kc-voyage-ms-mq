@@ -90,27 +90,29 @@ public class VoyageRequestListener implements Runnable {
             EventBase responseEvent = null;
             String productId = null;
 
-            if((productId= rawEvent.getJsonObject("payload").getString("productID")) != null) {
+            /*if((productId= rawEvent.getJsonObject("payload").getString("productID")) != null) {
                 if (productId.equals("VOYAGE_FAILS")) {
                     rawEvent.put("type", EventBase.TYPE_CONTAINER_CANCELED);
                 }
             }
+             */
 
             if(rawEvent.getString("type").equals(EventBase.ORDER_CREATED_TYPE)) {
 
                 Thread.sleep(3000);
 
-                UUID voyageId = UUID.randomUUID();
+                String voyageId = "V01";
                 log.debug("Generated new voyage ID: " + voyageId);
 
                 String orederId = rawEvent.getJsonObject("payload").getString("orderID");
 
                 VoyageAssignmentPayload voyageAssignmentPayload =
-                        new VoyageAssignmentPayload(orederId, voyageId.toString());
+                        new VoyageAssignmentPayload(orederId, voyageId);
                 responseEvent = new VoyageAssignedEvent(System.currentTimeMillis(), "1.0", voyageAssignmentPayload);
 
-                Voyage newVoyage = new Voyage(voyageId.toString(), orederId);
-                voyageServiceProxy.add(newVoyage);
+                Voyage newVoyage = voyageServiceProxy.findById(voyageId);
+                newVoyage.addOrder(orederId);
+                voyageServiceProxy.update(newVoyage);
 
             } else if(rawEvent.getString("type").equals(EventBase.TYPE_CONTAINER_CANCELED) ||
                     rawEvent.getString("type").equals(EventBase.TYPE_CONTAINER_NOT_FOUND)) {

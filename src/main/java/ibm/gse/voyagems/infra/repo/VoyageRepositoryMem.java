@@ -63,7 +63,7 @@ public class VoyageRepositoryMem implements VoyageRepository {
                 .findFirst()
                 .orElseThrow();
         toRemoveOrderId.removeOrder(orderId);
-        toRemoveOrderId.status = Voyage.VOYAGE_CANCELLED;
+        toRemoveOrderId.status = Voyage.VOYAGE_PENDING;
         return update(toRemoveOrderId);
     }
 }
