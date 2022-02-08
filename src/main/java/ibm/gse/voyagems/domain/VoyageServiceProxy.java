@@ -35,7 +35,8 @@ public class VoyageServiceProxy {
 
     public Voyage update(Voyage voyage) {
         Voyage updatedVoyage = voyageRepositoryMem.update(voyage);
-        voyageHistoryRepositoryMem.update(updatedVoyage);
+        Voyage newVoyageHistoryElem = new Voyage(updatedVoyage);
+        voyageHistoryRepositoryMem.update(newVoyageHistoryElem);
         return updatedVoyage;
 
     }
@@ -43,7 +44,8 @@ public class VoyageServiceProxy {
     public Voyage removeOrderId(String orderId) {
 
         Voyage updatedVoyage = voyageRepositoryMem.removeOrderId(orderId);
-        voyageHistoryRepositoryMem.update(updatedVoyage);
+        Voyage newVoyageHistoryElem = new Voyage(updatedVoyage);
+        voyageHistoryRepositoryMem.update(newVoyageHistoryElem);
         return updatedVoyage;
     }
 
